@@ -1,3 +1,5 @@
+# 前言,这里用不到的函数可以不定义,可以直接删去,包括API也可以删去不定义,不会报错的
+
 flora_api = {}  # 顾名思义,FloraBot的API,载入(若插件已设为禁用则不载入)后会赋值上
 
 
@@ -25,6 +27,25 @@ def event(data: dict):  # 事件函数,FloraBot每收到一个事件都会调用
     gid = data.get("group_id")  # 事件对象群号
     mid = data.get("message_id")  # 消息ID
     msg = data.get("raw_message")  # 消息内容
+    try:
+        global ws_client
+        global ws_server
+        send_address = data.get("SendAddress")
+        ws_client = send_address.get("WebSocketClient")
+        ws_server = send_address.get("WebSocketServer")
+    except:
+        ws_server=None
+        ws_client=None
+        pass
+    # 处理消息
     if msg is not None:
         msg = msg.replace("&#91;", "[").replace("&#93;", "]").replace("&amp;", "&").replace("&#44;", ",")  # 消息需要将URL编码替换到正确内容
         print(uid, gid, mid, msg)
+
+def send_compatible(msg:str,gid:str|int,uid: str|int):  #兼容性函数,用于兼容旧版本API(请直接调用本函数)
+    if flora_api.get("FloraVersion") == 'v1.01': #旧版本API
+        send_msg(msg=msg,gid=gid,uid=uid)
+    else:
+        send_type=flora_api.get("ConnectionType")
+        send_address=flora_api.get("FrameworkAddress")
+        send_msg(msg=msg,gid=gid,uid=uid,send_type=send_type,ws_client=ws_client,ws_server=ws_server)
