@@ -42,7 +42,7 @@ def event(data: dict):  # 事件函数,FloraBot每收到一个事件都会调用
         msg = msg.replace("&#91;", "[").replace("&#93;", "]").replace("&amp;", "&").replace("&#44;", ",")  # 消息需要将URL编码替换到正确内容
         print(uid, gid, mid, msg)
 
-def send_compatible(msg:str,gid:str|int,uid: str|int):  #兼容性函数,用于兼容旧版本API(请直接调用本函数)
+def send_compatible(msg:str,uid:str|int,gid: str|int,mid:int|str=None):  #兼容性函数,用于兼容旧版本API(请直接调用本函数)
     if flora_api.get("FloraVersion") == 'v1.01': #旧版本API
         send_msg(msg=msg,gid=gid,uid=uid)
     else:
