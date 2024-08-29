@@ -44,8 +44,8 @@ def event(data: dict):  # 事件函数,FloraBot每收到一个事件都会调用
 
 def send_compatible(msg:str,uid:str|int,gid: str|int,mid:int|str=None):  #兼容性函数,用于兼容旧版本API(请直接调用本函数)
     if flora_api.get("FloraVersion") == 'v1.01': #旧版本API
-        send_msg(msg=msg,gid=gid,uid=uid)
+        send_msg(msg=msg,gid=gid,uid=uid,mid=mid)
     else:
         send_type=flora_api.get("ConnectionType")
         send_address=flora_api.get("FrameworkAddress")
-        send_msg(msg=msg,gid=gid,uid=uid,send_type=send_type,ws_client=ws_client,ws_server=ws_server)
+        send_msg(msg=msg,gid=gid,uid=uid,mid=mid,send_type=send_type,ws_client=ws_client,ws_server=ws_server)
